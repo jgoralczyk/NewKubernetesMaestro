@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+spec:
+  selector:
+    matchLabels:
+      name: busybox-payment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: busybox-payment
+    spec:
+      containers:
+      - name: busybox-payment
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          echo "MERCHANT_ID: $MERCHANT_ID"
+          echo "PAYMENT_GATEWAY_API_KEY: $PAYMENT_GATEWAY_API_KEY"
+        env:
+          - name: MERCHANT_ID
+            valueFrom:
+              configMapKeyRef:
+                name: merchantmap
+                key: MERCHANT_ID
+          - name: PAYMENT_GATEWAY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: merchant-secret
+                key: PAYMENT_GATEWAY_API_KEY
+              

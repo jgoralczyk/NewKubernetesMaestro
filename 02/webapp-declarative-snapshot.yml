@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"labels":{"run":"webapp"},"name":"webapp-declarative","namespace":"default"},"spec":{"containers":[{"image":"k8smaestro/web-app:1.0","name":"webapp","ports":[{"containerPort":80}]}]}}
+  creationTimestamp: "2025-11-25T19:07:40Z"
+  labels:
+    run: webapp
+  name: webapp-declarative
+  namespace: default
+  resourceVersion: "3775"
+  uid: 3d0ac32c-e62f-49ad-b342-4f252e5b4e8f
+spec:
+  containers:
+  - image: k8smaestro/web-app:1.0
+    imagePullPolicy: IfNotPresent
+    name: webapp
+    ports:
+    - containerPort: 80
+      protocol: TCP
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-fnf2h
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: desktop-worker
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-fnf2h
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:07:41Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:07:40Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:07:41Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:07:41Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:07:40Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://41e1761645cd07622c2183baacea7f10f2e63e592e5830f1fa1f306f26d3d760
+    image: docker.io/k8smaestro/web-app:1.0
+    imageID: docker.io/k8smaestro/web-app@sha256:34be68282713beb3c61abeaa913e4c73db65c09d474e151571316d53151b46b5
+    lastState: {}
+    name: webapp
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2025-11-25T19:07:40Z"
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-fnf2h
+      readOnly: true
+      recursiveReadOnly: Disabled
+  hostIP: 172.18.0.3
+  hostIPs:
+  - ip: 172.18.0.3
+  phase: Running
+  podIP: 10.244.1.6
+  podIPs:
+  - ip: 10.244.1.6
+  qosClass: BestEffort
+  startTime: "2025-11-25T19:07:40Z"

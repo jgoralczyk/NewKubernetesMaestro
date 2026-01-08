@@ -6,7 +6,7 @@ metadata:
     app: k8sdemo-nodejs
   namespace: k8sdemo
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: k8sdemo-nodejs

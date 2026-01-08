@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2025-11-25T19:05:09Z"
+  labels:
+    run: webapp
+  name: webapp
+  namespace: default
+  resourceVersion: "3805"
+  uid: 3a94c7db-dd18-47fc-90dc-a885dff34d69
+spec:
+  containers:
+  - image: k8smaestro/web-app:1.0
+    imagePullPolicy: IfNotPresent
+    name: webapp
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-25rqm
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: desktop-worker
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-25rqm
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:05:11Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:05:09Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:05:11Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:05:11Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2025-11-25T19:05:09Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://e033ec97c9a5f5fdd0bd14799330ce2026b5da2fd858f2134fb03da5b802463d
+    image: docker.io/k8smaestro/web-app:1.0
+    imageID: docker.io/k8smaestro/web-app@sha256:34be68282713beb3c61abeaa913e4c73db65c09d474e151571316d53151b46b5
+    lastState: {}
+    name: webapp
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2025-11-25T19:05:10Z"
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-25rqm
+      readOnly: true
+      recursiveReadOnly: Disabled
+  hostIP: 172.18.0.3
+  hostIPs:
+  - ip: 172.18.0.3
+  - ip: fc00:f853:ccd:e793::3
+  phase: Running
+  podIP: 10.244.1.4
+  podIPs:
+  - ip: 10.244.1.4
+  qosClass: BestEffort
+  startTime: "2025-11-25T19:05:09Z"

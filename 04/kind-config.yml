@@ -1,0 +1,8 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30080  # Port wewnątrz klastra (NodePort)
+    hostPort: 30080       # Port na Twoim komputerze (localhost)
+    listenAddress: "0.0.0.0" # Opcjonalnie, nasłuchuj na wszystkich interfejsach

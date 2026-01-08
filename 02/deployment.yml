@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
       - name: webapp-ctr
-        image: k8smaestro/web-app:2.0
+        image: k8smaestro/web-app:1.0
