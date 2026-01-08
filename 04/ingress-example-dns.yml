@@ -3,12 +3,13 @@ kind: Ingress
 metadata:
   name: name-virtual-host-ingress
 spec:
+  ingressClassName: nginx
   rules:
   - host: foo.bar.com
     http:
       paths:
-      - pathType: ImplementationSpecific
-        path: "/"
+      - pathType: Prefix
+        path: /
         backend:
           service:
             name: service1
@@ -17,8 +18,8 @@ spec:
   - host: bar.foo.com
     http:
       paths:
-      - pathType: ImplementationSpecific
-        path: "/"
+      - pathType: Prefix
+        path: /
         backend:
           service:
             name: service2

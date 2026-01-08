@@ -1,0 +1,33 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: blue-green-route
+  labels:
+    part-of: blue-green-demo
+spec:
+  parentRefs:
+  - name: blue-green-gateway
+  rules:
+  # Route 1: /api -> weather-api v2
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: weather-api-svc-v2
+      port: 80
+
+  # Route 2: / -> passage v2 (default)
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: passage-webapp-svc-v2
+      port: 80

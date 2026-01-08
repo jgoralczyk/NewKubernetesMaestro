@@ -3,15 +3,13 @@ kind: Ingress
 metadata:
   name: ingress-resource
   annotations:
-    # deprecated
-    # kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    # deprecated
-    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.org/redirect-to-https: "false"
+    nginx.org/rewrites: "serviceName=passage-v2-webapp-svc rewrite=/;serviceName=weather-api-svc rewrite=/"
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: app.WKLEJ_TU_ADRES_IP.nip.io
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -20,14 +18,14 @@ spec:
             name: passage-webapp-svc
             port:
               number: 80
-      - path: /v2
+      - path: /v2/
         pathType: Prefix
         backend:
           service: 
             name: passage-v2-webapp-svc
             port:
               number: 80
-      - path: /api
+      - path: /api/
         pathType: Prefix
         backend:
           service:

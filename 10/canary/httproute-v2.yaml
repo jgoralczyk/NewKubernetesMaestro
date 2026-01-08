@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: info-app-route
+  labels:
+    part-of: canary-demo
+spec:
+  parentRefs:
+  - name: canary-gateway
+  hostnames:
+  - "info.app.34.118.127.205.nip.io"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: info-webapp-svc-v2
+      port: 80

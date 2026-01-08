@@ -1,0 +1,29 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: query-params-routing
+spec:
+  parentRefs:
+  - name: eg
+
+  rules:
+  # Route 1: Jeśli ?version=beta, kieruj do wersji v2
+  - matches:
+    - queryParams:
+      - name: version
+        value: beta
+      path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: passage-v2-webapp-svc
+      port: 80
+
+  # Route 2: Domyślnie - wersja stabilna
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: passage-webapp-svc
+      port: 80

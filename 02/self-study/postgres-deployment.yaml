@@ -15,21 +15,21 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: bitnami/postgresql
+          image: docker.io/postgres:18
           ports:
             - containerPort: 5432
           env:
-            - name: POSTGRESQL_DATABASE
-              value: k8smaestro
-            - name: POSTGRESQL_PASSWORD
-              value: k8smaestro
-            - name: POSTGRESQL_USERNAME
+            - name: POSTGRES_DB
+              value: db
+            - name: POSTGRES_PASSWORD
+              value: odoo
+            - name: POSTGRES_USER
               value: odoo
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
           volumeMounts:
             - name: postgres-storage
-              mountPath: /bitnami/postgresql
+              mountPath: /var/lib/postgresql
       volumes:
         - name: postgres-storage
           emptyDir: {}
