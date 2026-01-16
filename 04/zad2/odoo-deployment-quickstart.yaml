@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo-deployment
+  namespace: odoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      initContainers:
+      - name: odoo-init
+        image: odoo:19
+        command: ["odoo", "-i", "base", "-d", "db", "--stop-after-init", "--db_host=postgresql", "--db_port=5432", "--db_user=odoo", "--db_password=odoo", "--no-http"]
+      containers:
+      - name: odoo
+        image: odoo:19
+##########
+# TO NIE JEST KOMPLETNY Deployment - TO JEST FRAGMENT BY POMÓC CI RUSZYĆ Z MIEJSCA.
+##########
+# TLDR; Odoo wymaga inicjalizacji bazy danych przed uruchomieniem głównego kontenera.
+# Dlatego w tym pliku dodaliśmy initContainer, który wykonuje tę inicjalizację.
+# Stwórz nowy plik odoo-deployment.yaml i przekopiuj tam zawartość tego pliku (bez komentarzy).
+# Dodaj odpowiednie zmienne środowiskowe do głównego kontenera
+# Na koniec - stwórz plik odoo-service.yaml i stwórz tam obiekt Service dla Odoo.
+# ########

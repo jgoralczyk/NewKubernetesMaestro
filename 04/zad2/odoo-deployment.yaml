@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odooapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odooapp
+  strategy:
+    type: Recreate # Ważne: przy bazie danych lepiej nie robić RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: odooapp
+    spec:
+      containers:
+        - name: odooapp 
+          image: odoo:17
+          # ZMIANA: Usunięto --stop-after-init.
+          # Odoo zainstaluje moduły i pozostanie uruchomione.
+          args: ["-i", "base", "-d", "k8smaestro"]
+          ports:
+            - containerPort: 8069
+          env:
+            - name: HOST
+              value: "postgresql"
+            - name: PORT
+              value: "5432"
+            - name: USER
+              value: "odoo"
+            - name: PASSWORD
+              value: "k8smaestro"
+            - name: DB
+              value: "k8smaestro"
+          
+          # Healthchecki - bardzo ważne przy pierwszym starcie
+          readinessProbe:
+            httpGet:
+              path: /web/health
+              port: 8069
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          
+          livenessProbe:
+            httpGet:
+              path: /web/health
+              port: 8069
+            # Dajemy mu 5 minut na start. Instalacja bazy chwilę trwa.
+            initialDelaySeconds: 300 
+            periodSeconds: 30
+            
+          volumeMounts:
+            - name: odoo-data
+              mountPath: /var/lib/odoo
+      volumes:
+        - name: odoo-data
+          emptyDir: {}
