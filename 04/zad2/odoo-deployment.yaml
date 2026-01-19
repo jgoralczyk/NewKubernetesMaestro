@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: odooapp
 spec:
+  securityContext:
+    fsGroup: 101
   replicas: 1
   selector:
     matchLabels:
@@ -30,7 +32,10 @@ spec:
             - name: USER
               value: "odoo"
             - name: PASSWORD
-              value: "k8smaestro"
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-db-secrets
+                  key: db-password
             - name: DB
               value: "k8smaestro"
           
@@ -51,8 +56,9 @@ spec:
             periodSeconds: 30
             
           volumeMounts:
-            - name: odoo-data
+            - name: odoovol
               mountPath: /var/lib/odoo
       volumes:
-        - name: odoo-data
-          emptyDir: {}
+        - name: odoovol
+          persistentVolumeClaim:
+            claimName: pvc-odoo

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-odoo
+spec:
+  storageClassName: "my-gce-pd" ## IMPORTANT - this enables auto PV creating
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
